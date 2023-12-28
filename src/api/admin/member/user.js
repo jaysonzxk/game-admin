@@ -4,7 +4,7 @@ import { praseStrEmpty } from "@/utils/ruoyi";
 // 查询用户列表
 export function listUser(query) {
   return request({
-    url: "/admin/member/user/",
+    url: "/admin/member/user",
     method: "get",
     params: query
   });

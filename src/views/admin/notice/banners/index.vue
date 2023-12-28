@@ -172,7 +172,7 @@
 <script>
 import { listBanners, getBanners, delBanners, addBanners, updateBanners } from "@/api/admin/notice/banners";
 import Editor from "@/components/Editor";
-import upload from './upload.vue';
+// import upload from './upload.vue';
 import { getToken } from "@/utils/auth";
 
 export default {
@@ -230,7 +230,7 @@ export default {
             },
             host: process.env.VUE_APP_BASE_API + '/',
             headers: {
-                Authorization: "Bearer " + getToken()
+                Authorization: "JWT " + getToken()
             }
         };
     },
