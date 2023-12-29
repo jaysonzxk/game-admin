@@ -366,6 +366,7 @@ export default {
             getManufacturer(id).then(response => {
                 const data = response.data;
                 this.form = data;
+                this.value = this.host + data.uri;
                 this.open = true;
                 this.title = "修改厂商";
             });

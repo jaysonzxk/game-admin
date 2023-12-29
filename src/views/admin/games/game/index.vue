@@ -3,8 +3,8 @@
         <el-row>
             <el-col :span="20" :xs="24">
                 <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-                    <el-form-item label="类别名称" prop="name">
-                        <el-input v-model="queryParams.name" placeholder="请输入类别名称" clearable size="small"
+                    <el-form-item label="游戏名称" prop="name">
+                        <el-input v-model="queryParams.name" placeholder="请输入游戏名称" clearable size="small"
                             style="width: 240px" @keyup.enter.native="handleQuery" />
                     </el-form-item>
                     
@@ -34,18 +34,31 @@
                     <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
                 </el-row>
 
-                <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
+                <el-table v-loading="loading" :data="gameList" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center" />
                     <el-table-column label="序号" type="index" width="50" align="center">
                     </el-table-column>
-                    <el-table-column label="类别名称" align="center" prop="name" :show-overflow-tooltip="true" />
+                    <el-table-column label="游戏名称" align="center" prop="name" :show-overflow-tooltip="true" />
                     <el-table-column label="封面" align="center" prop="uri" width="400">
                         <template slot-scope="scope">
                             <el-image style="width: auto; height: 100px" :src="host + scope.row.uri">
                             </el-image>
                         </template>
                     </el-table-column>
+                    <el-table-column label="跳转地址" align="center" prop="url" :show-overflow-tooltip="true" />
                     <el-table-column label="排序" align="center" prop="sort" :show-overflow-tooltip="true" />
+                    <el-table-column label="是否推荐" align="center">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.isRecommend === 1">推荐</span>
+                            <span v-else>--</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="是否热门" align="center">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.isHot === 1">热门</span>
+                            <span v-else>--</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="状态" align="center">
                         <template slot-scope="scope">
                             <span v-if="scope.row.status === 1">上架</span>
@@ -62,15 +75,15 @@
                             <span>{{ parseTime(scope.row.create_datetime) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column v-if="hasPermi(['member:vip:post', 'member:vip:post'])" label="操作" align="center"
+                    <el-table-column v-if="hasPermi(['games:games:post', 'games:games:post'])" label="操作" align="center"
                         width="160" class-name="small-padding fixed-width">
                         <template slot-scope="scope">
-                            <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
+                            <el-button v-hasPermi="['games:games:post']" size="mini" type="text" icon="el-icon-edit"
                                 @click="handleUpdate(scope.row)">修改
                             </el-button>
-                            <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
+                            <!-- <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
                                 @click="handleDelete(scope.row)">删除
-                            </el-button>
+                            </el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -85,8 +98,22 @@
             <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                 <el-row>
                     <el-col :span="14">
-                        <el-form-item label="类别名称" prop="name">
+                        <el-form-item label="游戏名称" prop="name">
                             <el-input v-model="form.name" placeholder="请输入类别名称" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="14">
+                        <el-form-item label="跳转地址" prop="url">
+                            <el-input v-model="form.url" placeholder="请输入跳转地址" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="游戏厂商" prop="gameManufacturer">
+                            <el-select v-model="form.gameManufacturer" placeholder="游戏厂商" clearable size="small"
+                                style="width: 240px">
+                                <el-option v-for="(item, index) in allManufacturerList" :key="index" :label="item.name"
+                                    :value="item.id" />
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="20">
@@ -127,6 +154,24 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
+                        <el-form-item label="是否推荐">
+                            <el-radio-group v-model="form.isRecommend">
+                                <el-radio v-for="dict in recommendOptions" :key="dict.dictValue" :label="dict.dictValue">{{
+                                    dict.dictLabel
+                                }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="是否热门">
+                            <el-radio-group v-model="form.isHot">
+                                <el-radio v-for="dict in hotOptions" :key="dict.dictValue" :label="dict.dictValue">{{
+                                    dict.dictLabel
+                                }}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item label="状态">
                             <el-radio-group v-model="form.status">
                                 <el-radio v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictValue">{{
@@ -153,12 +198,12 @@
   
 <script>
 import {
-    addCategory,
-    delCategory,
-    getCategory,
-    listCategory,
-    updateCategory
-} from "@/api/admin/games/category";
+    addGame,
+    getGame,
+    listGame,
+    updateGame,
+    AllManufacturer
+} from "@/api/admin/games/game";
 import { getToken } from "@/utils/auth";
 export default {
     name: "Category",
@@ -180,7 +225,9 @@ export default {
             // 总条数
             total: 0,
             // 用户表格数据
-            categoryList: null,
+            gameList: null,
+            // 厂商；列表
+            allManufacturerList: null,
             // 弹出层标题
             title: "",
             // 是否显示弹出层
@@ -189,6 +236,10 @@ export default {
             dateRange: [],
             // 状态数据字典
             statusOptions: [{ dictLabel: "上架", dictValue: 1 }, { dictLabel: "下架", dictValue: 0 }],
+            // 推荐
+            recommendOptions: [{ dictLabel: "推荐", dictValue: 1 }, { dictLabel: "不推荐", dictValue: 0 }],
+            // 热门
+            hotOptions: [{ dictLabel: "热门", dictValue: 1 }, { dictLabel: "不热门", dictValue: 0 }],
             // 表单参数
             form: {
                 status: 1
@@ -222,8 +273,14 @@ export default {
     },
     created() {
         this.getList();
+        this.getAllManufacturer();
     },
     methods: {
+        getAllManufacturer() {
+            AllManufacturer().then(response => {
+                this.allManufacturerList = response.data;
+            })
+        },
         removeImage() {
             this.value = '';
         },
@@ -252,8 +309,8 @@ export default {
         /** 查询用户列表 */
         getList() {
             this.loading = true;
-            listCategory(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-                this.categoryList = response.data.results;
+            listGame(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+                this.gameList = response.data.results;
                 this.total = response.data.count;
                 this.loading = false;
             }
@@ -293,7 +350,9 @@ export default {
                 name: undefined,
                 status: 1,
                 remark: undefined,
-                uri: undefined
+                uri: undefined,
+                isRecommend: 0,
+                isHot: 0
             };
             this.resetForm("form");
         },
@@ -319,17 +378,17 @@ export default {
             this.reset();
             console.log(this.form);
             this.open = true;
-            this.title = "添加类别";
+            this.title = "添加游戏";
         },
         /** 修改按钮操作 */
         handleUpdate(row) {
             // this.reset();
             const id = row.id || this.ids;
-            getCategory(id).then(response => {
+            getGame(id).then(response => {
                 const data = response.data;
                 this.form = data;
                 this.open = true;
-                this.title = "修改vip卡";
+                this.title = "修改游戏";
             });
         },
 
@@ -338,13 +397,13 @@ export default {
             this.$refs["form"].validate(valid => {
                 if (valid) {
                     if (this.form.id !== undefined) {
-                        updateCategory(this.form).then(response => {
+                        updateGame(this.form).then(response => {
                             this.msgSuccess("修改成功");
                             this.open = false;
                             this.getList();
                         });
                     } else {
-                        addCategory(this.form).then(response => {
+                        addGame(this.form).then(response => {
                             this.msgSuccess("新增成功");
                             this.open = false;
                             this.getList();
@@ -355,19 +414,19 @@ export default {
             });
         },
         /** 删除按钮操作 */
-        handleDelete(row) {
-            const vipCardId = row.id || this.ids;
-            this.$confirm('是否确认删除该数据', "警告", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
-            }).then(function () {
-                return delCategory(vipCardId);
-            }).then(() => {
-                this.getList();
-                this.msgSuccess("删除成功");
-            });
-        },
+        // handleDelete(row) {
+        //     const vipCardId = row.id || this.ids;
+        //     this.$confirm('是否确认删除该数据', "警告", {
+        //         confirmButtonText: "确定",
+        //         cancelButtonText: "取消",
+        //         type: "warning"
+        //     }).then(function () {
+        //         return delCategory(vipCardId);
+        //     }).then(() => {
+        //         this.getList();
+        //         this.msgSuccess("删除成功");
+        //     });
+        // },
     }
 };
 </script>
