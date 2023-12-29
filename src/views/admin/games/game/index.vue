@@ -3,17 +3,11 @@
         <el-row>
             <el-col :span="20" :xs="24">
                 <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-                    <el-form-item label="厂商名称" prop="name">
-                        <el-input v-model="queryParams.name" placeholder="请输入厂商名称" clearable size="small"
+                    <el-form-item label="类别名称" prop="name">
+                        <el-input v-model="queryParams.name" placeholder="请输入类别名称" clearable size="small"
                             style="width: 240px" @keyup.enter.native="handleQuery" />
                     </el-form-item>
-                    <el-form-item label="大类" prop="status">
-                        <el-select v-model="queryParams.gameCategory" placeholder="大类" clearable size="small"
-                            style="width: 240px">
-                            <el-option v-for="dict in allCategoryList" :key="dict.id" :label="dict.name"
-                                :value="dict.id" />
-                        </el-select>
-                    </el-form-item>
+                    
                     <el-form-item label="状态" prop="status">
                         <el-select v-model="queryParams.status" placeholder="状态" clearable size="small"
                             style="width: 240px">
@@ -40,16 +34,11 @@
                     <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
                 </el-row>
 
-                <el-table v-loading="loading" :data="manufacturerList" @selection-change="handleSelectionChange">
+                <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center" />
                     <el-table-column label="序号" type="index" width="50" align="center">
                     </el-table-column>
-                    <el-table-column label="厂商名称" align="center" prop="name" :show-overflow-tooltip="true" />
-                    <el-table-column label="分类名称" align="center" prop="gameCategory">
-                        <template slot-scope="scope">
-                            {{ getCategoryName(scope.row.gameCategory) }}
-                        </template>
-                    </el-table-column>
+                    <el-table-column label="类别名称" align="center" prop="name" :show-overflow-tooltip="true" />
                     <el-table-column label="封面" align="center" prop="uri" width="400">
                         <template slot-scope="scope">
                             <el-image style="width: auto; height: 100px" :src="host + scope.row.uri">
@@ -73,14 +62,14 @@
                             <span>{{ parseTime(scope.row.create_datetime) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column v-if="hasPermi(['games:gameManufacturer:post', 'games:gameManufacturer:post'])"
-                        label="操作" align="center" width="160" class-name="small-padding fixed-width">
+                    <el-table-column v-if="hasPermi(['member:vip:post', 'member:vip:post'])" label="操作" align="center"
+                        width="160" class-name="small-padding fixed-width">
                         <template slot-scope="scope">
-                            <el-button v-hasPermi="['games:gameManufacturer:post']" size="mini" type="text"
-                                icon="el-icon-edit" @click="handleUpdate(scope.row)">修改
+                            <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
+                                @click="handleUpdate(scope.row)">修改
                             </el-button>
-                            <el-button v-hasPermi="['games:gameManufacturer:post']" size="mini" type="text"
-                                icon="el-icon-edit" @click="handleDelete(scope.row)">删除
+                            <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
+                                @click="handleDelete(scope.row)">删除
                             </el-button>
                         </template>
                     </el-table-column>
@@ -96,8 +85,8 @@
             <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                 <el-row>
                     <el-col :span="14">
-                        <el-form-item label="厂商名称" prop="name">
-                            <el-input v-model="form.name" placeholder="请输入厂商名称" />
+                        <el-form-item label="类别名称" prop="name">
+                            <el-input v-model="form.name" placeholder="请输入类别名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="20">
@@ -133,15 +122,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="分类" prop="gameCategory">
-                            <el-select v-model="form.gameCategory" placeholder="分类" clearable size="small"
-                                style="width: 240px">
-                                <el-option v-for="(item, index) in allCategoryList" :key="index" :label="item.name"
-                                    :value="item.id" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item label="排序" prop="sort">
                             <el-input v-model="form.sort" placeholder="请输入排序" type="number" />
                         </el-form-item>
@@ -173,13 +153,12 @@
   
 <script>
 import {
-    addManufacturer,
-    delManufacturer,
-    getManufacturer,
-    listManufacturer,
-    updateManufacturer,
-    AllCategory
-} from "@/api/admin/games/manufacturer";
+    addCategory,
+    delCategory,
+    getCategory,
+    listCategory,
+    updateCategory
+} from "@/api/admin/games/category";
 import { getToken } from "@/utils/auth";
 export default {
     name: "Category",
@@ -201,9 +180,7 @@ export default {
             // 总条数
             total: 0,
             // 用户表格数据
-            manufacturerList: null,
-            // 所有分类
-            allCategoryList: null,
+            categoryList: null,
             // 弹出层标题
             title: "",
             // 是否显示弹出层
@@ -245,23 +222,8 @@ export default {
     },
     created() {
         this.getList();
-        this.getAllCategory();
     },
     methods: {
-        getCategoryName(val){
-            if(this.allCategoryList.length>0){
-                for(let i=0; i<this.allCategoryList.length;i++){
-                    if(val == this.allCategoryList[i].id){
-                        return this.allCategoryList[i].name;
-                    }
-                }
-            }
-        },
-        getAllCategory() {
-            AllCategory().then(response => {
-                this.allCategoryList = response.data;
-            })
-        },
         removeImage() {
             this.value = '';
         },
@@ -290,8 +252,8 @@ export default {
         /** 查询用户列表 */
         getList() {
             this.loading = true;
-            listManufacturer(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-                this.manufacturerList = response.data.results;
+            listCategory(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+                this.categoryList = response.data.results;
                 this.total = response.data.count;
                 this.loading = false;
             }
@@ -355,19 +317,19 @@ export default {
         /** 新增按钮操作 */
         handleAdd() {
             this.reset();
-            
+            console.log(this.form);
             this.open = true;
-            this.title = "添加厂商";
+            this.title = "添加类别";
         },
         /** 修改按钮操作 */
         handleUpdate(row) {
             // this.reset();
             const id = row.id || this.ids;
-            getManufacturer(id).then(response => {
+            getCategory(id).then(response => {
                 const data = response.data;
                 this.form = data;
                 this.open = true;
-                this.title = "修改厂商";
+                this.title = "修改vip卡";
             });
         },
 
@@ -376,13 +338,13 @@ export default {
             this.$refs["form"].validate(valid => {
                 if (valid) {
                     if (this.form.id !== undefined) {
-                        updateManufacturer(this.form).then(response => {
+                        updateCategory(this.form).then(response => {
                             this.msgSuccess("修改成功");
                             this.open = false;
                             this.getList();
                         });
                     } else {
-                        addManufacturer(this.form).then(response => {
+                        addCategory(this.form).then(response => {
                             this.msgSuccess("新增成功");
                             this.open = false;
                             this.getList();
@@ -394,13 +356,13 @@ export default {
         },
         /** 删除按钮操作 */
         handleDelete(row) {
-            const manufacturerId = row.id || this.ids;
+            const vipCardId = row.id || this.ids;
             this.$confirm('是否确认删除该数据', "警告", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(function () {
-                return delManufacturer(manufacturerId);
+                return delCategory(vipCardId);
             }).then(() => {
                 this.getList();
                 this.msgSuccess("删除成功");

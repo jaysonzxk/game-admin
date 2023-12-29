@@ -356,13 +356,13 @@ export default {
         },
         /** 删除按钮操作 */
         handleDelete(row) {
-            const vipCardId = row.id || this.ids;
+            const categoryId = row.id || this.ids;
             this.$confirm('是否确认删除该数据', "警告", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
             }).then(function () {
-                return delCategory(vipCardId);
+                return delCategory(categoryId);
             }).then(() => {
                 this.getList();
                 this.msgSuccess("删除成功");
