@@ -120,7 +120,7 @@
                                     </div>
                                 </el-image>
                                 <div v-else class="image">
-                                    <el-image :src="value" :style="`width:200px;height:150px;`" fit="fill" />
+                                    <el-image :src="value" :style="`width:360px;height:150px;`" fit="fill" />
                                     <div class="mask">
                                         <div class="actions">
                                             <span title="预览" @click.stop="dialogVisible = true">
@@ -178,8 +178,7 @@ import { getToken } from "@/utils/auth";
 export default {
     name: "Banners",
     components: {
-        Editor,
-        upload
+        Editor
     },
     data() {
         return {
@@ -363,9 +362,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .el-upload--picture-card{
+    width: 360px !important;
+    height: 150px !important;
+}
 .image {
     position: relative;
-
+    
     .mask {
         opacity: 0;
         position: absolute;
