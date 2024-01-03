@@ -1,5 +1,51 @@
 {
-    "hello": "你好",
+    "login": {
+      "title": "BMS-管理后台",
+      "remember": "记住密码",
+      "login": "登 录",
+      "logining": "登 录 中...",
+      "usernamePlaceholder": "账号",
+      "passwordPlaceholder": "密码"
+    },
+    "logout": {
+      "tip1": "确定注销并退出系统吗？",
+      "tip2": "提示",
+      "confirm": "确定",
+      "cancel": "取消"
+    },
+    "navBar": {
+      "personalCentre": "个人中心",
+      "logout": "退出登录"
+    },
+    "menu": [
+      {"name":"System","title": "系统管理"},
+      {"name":"Permission","title": "权限管理"},
+      {"name":"Dict", "title":"字典管理"},
+      {"name":"Config","title": "参数管理"},
+      {"name":"Post","title": "岗位管理"},
+      {"name":"Dept","title": "部门管理"},
+      {"name":"Menu","title": "菜单管理"},
+      {"name":"Role","title": "角色管理"},
+      {"name":"User","title": "管理员列表"},
+      {"name":"Savefile","title": "文件管理"},
+      {"name":"Message","title": "通知公告"},
+      {"name":"Log","title": "日志管理"},
+      {"name":"Logininfor","title": "登录日志"},
+      {"name":"Operlog","title": "操作日志"},
+      {"name":"Monitor","title": "系统监控"},
+      {"name":"Celery","title": "定时任务"},
+      {"name":"Celerylog","title": "定时日志"},
+      {"name":"Tool","title": "系统工具"},
+      {"name":"Build","title": "表单构建"},
+      {"name":"Index","title": "首页"},
+      {"name":"Member","title": "用户管理"},
+      {"name":"Vip","title": "VIP商品"},
+      {"name":"Uservip","title": "用户VIP"},
+      {"name":"Games","title": "游戏管理"},
+      {"name":"Category","title": "游戏分类"},
+      {"name":"Notice","title": "广告配置"},
+      {"name":"Banner","title": "轮播图管理"}
+    ],
     "table": {
       "date": "日期",
       "name": "姓名",

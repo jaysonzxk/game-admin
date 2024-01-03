@@ -43,13 +43,13 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/user/profile">
-            <el-dropdown-item>个人中心</el-dropdown-item>
+            <el-dropdown-item>{{ $t('navBar.personalCentre') }}</el-dropdown-item>
           </router-link>
-          <el-dropdown-item @click.native="setting = true">
+          <!-- <el-dropdown-item @click.native="setting = true">
             <span>布局设置</span>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item divided @click.native="logout">
-            <span>退出登录</span>
+            <span>{{ $t('navBar.logout') }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -67,6 +67,7 @@ import Search from "@/components/HeaderSearch";
 import RuoYiGit from "@/components/RuoYi/Git";
 import RuoYiDoc from "@/components/RuoYi/Doc";
 import store from "@/store";
+import i18n from '@/locales/i18n'
 
 export default {
   components: {
@@ -102,9 +103,9 @@ export default {
       this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      this.$confirm("确定注销并退出系统吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm(this.$t('logout.tip1'), this.$t('logout.tip2'), {
+        confirmButtonText: this.$t('logout.confirm'),
+        cancelButtonText: this.$t('logout.cancel'),
         type: "warning"
       }).then(() => {
         this.$store.dispatch("LogOut").then(() => {

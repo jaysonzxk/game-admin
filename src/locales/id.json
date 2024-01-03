@@ -1,8 +1,15 @@
 {
-    "hello": "你好",
-    "table": {
-      "date": "日期",
-      "name": "姓名",
-      "address": "地址"
-    }
+  "login": {
+    "title": "BMS Latar belakang manajemen",
+    "remember": "ingat sandi",
+    "login": "masuk log in",
+    "logining": "sedang masuk...",
+    "usernamePlaceholder": "akun",
+    "passwordPlaceholder": "kata sandi"
+  },
+  "table": {
+    "date": "日期",
+    "name": "姓名",
+    "address": "地址"
   }
+}

@@ -1,8 +1,15 @@
 {
-    "hello": "hello",
-    "table": {
-      "date": "Date",
-      "name": "Name",
-      "address": "Address"
-    }
+  "login": {
+    "title": "BMS Admin backend",
+    "remember": "remember password",
+    "login": "log in",
+    "logining": "logging in...",
+    "usernamePlaceholder": "account",
+    "passwordPlaceholder": "password"
+  },
+  "table": {
+    "date": "日期",
+    "name": "姓名",
+    "address": "地址"
   }
+}

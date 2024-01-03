@@ -3,6 +3,7 @@ import { getRouters } from "@/api/admin/menu";
 import Layout from "@/layout/index";
 import ParentView from "@/components/ParentView";
 import { handleTree } from "@/utils/ruoyi";
+import i18n from '@/locales/i18n'
 
 const permission = {
   state: {
@@ -25,6 +26,13 @@ const permission = {
       return new Promise(resolve => {
         // 向后端请求路由数据
         getRouters().then(res => {
+          for (let i=0;i<res.data.length;i++) {
+            for(let j=0;j<i18n.t('menu').length;j++){
+              if (res.data[i].name === i18n.t('menu')[j].name) {
+                res.data[i].meta.title = i18n.t('menu')[j].title;
+              }
+            }
+          }
           const data = handleTree(res.data, "id");
           const sdata = JSON.parse(JSON.stringify(data));
           const rdata = JSON.parse(JSON.stringify(data));
