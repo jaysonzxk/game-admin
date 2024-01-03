@@ -76,32 +76,37 @@ export default {
     changeLanguage(index){
       this.language = this.languageList[index];
       switch (this.language.value) {
-        case "ZH-TW":
-          this.$i18n.locale = "tw";
-          break;
         case "EN-US":
           this.$i18n.locale = "en";
+          localStorage.setItem('lang', 'en');
           break;
         case "ZH-CN":
           this.$i18n.locale = "cn";
+          localStorage.setItem('lang', 'cn');
           break;
         case "VI":
           this.$i18n.locale = "vi";
+          localStorage.setItem('lang', 'vi');
           break;
         case "KO":
           this.$i18n.locale = "ko";
+          localStorage.setItem('lang', 'ko');
           break;
         case "JA":
           this.$i18n.locale = "ja";
+          localStorage.setItem('lang', 'ja');
           break;
         case "ID":
           this.$i18n.locale = "id";
+          localStorage.setItem('lang', 'id');
           break;
         case "MN":
           this.$i18n.locale = "mn";
+          localStorage.setItem('lang', 'mn');
           break;
         case "TH":
           this.$i18n.locale = "th";
+          localStorage.setItem('lang', 'th');
           break;
       }
     },

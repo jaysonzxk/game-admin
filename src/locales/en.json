@@ -7,6 +7,45 @@
     "usernamePlaceholder": "account",
     "passwordPlaceholder": "password"
   },
+  "logout": {
+    "tip1": "Are you sure you want to log out and exit the system?",
+    "tip2": "hint",
+    "confirm": "Sure",
+    "cancel": "Cancel"
+  },
+  "navBar": {
+    "personalCentre": "personal center",
+    "logout": "sign out"
+  },
+  "menu": [
+    {"name":"System","title": "SystemManagement"},
+    {"name":"Permission","title": "AuthorityManagement"},
+    {"name":"Dict", "title":"DictManagement"},
+    {"name":"Config","title": "ConfigManagement"},
+    {"name":"Post","title": "PostManagement"},
+    {"name":"Dept","title": "DeptManagement"},
+    {"name":"Menu","title": "MenuManagement"},
+    {"name":"Role","title": "RoleManagement"},
+    {"name":"User","title": "AdminList"},
+    {"name":"Savefile","title": "FileManagement"},
+    {"name":"Message","title": "Announcement"},
+    {"name":"Log","title": "LogManagement"},
+    {"name":"Logininfor","title": "LoginLog"},
+    {"name":"Operlog","title": "OperationLog"},
+    {"name":"Monitor","title": "SystemMonitor"},
+    {"name":"Celery","title": "CeleryTasks"},
+    {"name":"Celerylog","title": "Celerylog"},
+    {"name":"Tool","title": "SystemTool"},
+    {"name":"Build","title": "FormBuilding"},
+    {"name":"Index","title": "FrontPage"},
+    {"name":"Member","title": "UserManagement"},
+    {"name":"Vip","title": "VIPMerchandise"},
+    {"name":"Uservip","title": "UserVIP"},
+    {"name":"Games","title": "GameManagement"},
+    {"name":"Category","title": "GameCategory"},
+    {"name":"Notice","title": "AdvConfiguration"},
+    {"name":"Banner","title": "BannersManagement"}
+  ],
   "table": {
     "date": "日期",
     "name": "姓名",

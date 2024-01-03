@@ -32,7 +32,7 @@ function loadLocaleMessages() {
   return {
     cn: { ...messages.cn, ...elCn },
     en: { ...messages.en, ...elEn },
-    vi: {...messages.vi, ...elVi},
+    vi: { ...messages.vi, ...elVi},
     ko: { ...messages.ko, ...elKo },
     th: { ...messages.th, ...elTh },
     id: { ...messages.id, ...elId },
@@ -41,7 +41,7 @@ function loadLocaleMessages() {
   };
 }
 const i18n = new VueI18n({
-  locale: "cn" ,
+  locale: localStorage.getItem('lang')||"cn" ,
   messages: loadLocaleMessages()
 });
 locale.i18n((key, value) => i18n.t(key, value));
