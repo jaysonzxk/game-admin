@@ -9,7 +9,7 @@ export function login(username, password, code, uuid) {
     idKeyC: uuid
   };
   return request({
-    url: "/admin/login/",
+    url: "/admin/login",
     method: "post",
     data: data
   });

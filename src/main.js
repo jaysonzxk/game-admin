@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 
 import Element from "element-ui";
 import "./assets/styles/element-variables.scss";
+import i18n from "@/locales/i18n";
 
 import "@/assets/styles/index.scss"; // global css
 import "@/assets/styles/ruoyi.scss"; // ruoyi css
@@ -102,5 +103,6 @@ new Vue({
   el: "#app",
   router,
   store,
+  i18n,
   render: h => h(App)
 });
