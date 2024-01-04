@@ -10,10 +10,10 @@ export function listGame(query) {
   });
 }
 
-// 查询厂商详细
-export function getGame(manufacturerId) {
+// 查询游戏详细
+export function getGame(gamneId) {
   return request({
-    url: "/admin/games/games/" + praseStrEmpty(manufacturerId),
+    url: "/admin/games/games/" + praseStrEmpty(gamneId),
     method: "get"
   });
 }
@@ -37,10 +37,10 @@ export function updateGame(data) {
   });
 }
 
-  // 所有分类
-  export function AllManufacturer(){
+   // 所有分类
+   export function AllCategory(){
     return request({
-        url: "/admin/games/manufacturer/list",
+        url: "/admin/games/category/list",
         method: 'get'
     })
   }

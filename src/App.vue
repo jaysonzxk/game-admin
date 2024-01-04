@@ -81,8 +81,8 @@ export default {
           localStorage.setItem('lang', 'en');
           break;
         case "ZH-CN":
-          this.$i18n.locale = "cn";
-          localStorage.setItem('lang', 'cn');
+          this.$i18n.locale = "zh";
+          localStorage.setItem('lang', 'zh');
           break;
         case "VI":
           this.$i18n.locale = "vi";

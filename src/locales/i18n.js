@@ -4,7 +4,7 @@ import VueI18n from "vue-i18n";
 //element 国际化处理
 import locale from "element-ui/lib/locale";
 import elEn from "element-ui/lib/locale/lang/en";
-import elCn from "element-ui/lib/locale/lang/zh-CN";
+import elZh from "element-ui/lib/locale/lang/zh-CN";
 import elVi from "element-ui/lib/locale/lang/vi";  // 越南
 import elKo from "element-ui/lib/locale/lang/ko";  // 韩国
 import elTh from "element-ui/lib/locale/lang/th";  // 泰语
@@ -30,7 +30,7 @@ function loadLocaleMessages() {
     messages[keyArr.join('.').replace(/\.json$/g, '')] = locales(file);
   });
   return {
-    cn: { ...messages.cn, ...elCn },
+    zh: { ...messages.zh, ...elZh },
     en: { ...messages.en, ...elEn },
     vi: { ...messages.vi, ...elVi},
     ko: { ...messages.ko, ...elKo },
@@ -41,7 +41,7 @@ function loadLocaleMessages() {
   };
 }
 const i18n = new VueI18n({
-  locale: localStorage.getItem('lang')||"cn" ,
+  locale: localStorage.getItem('lang')||"zh" ,
   messages: loadLocaleMessages()
 });
 locale.i18n((key, value) => i18n.t(key, value));

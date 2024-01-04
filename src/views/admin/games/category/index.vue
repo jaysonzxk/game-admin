@@ -39,7 +39,7 @@
                     <el-table-column label="序号" type="index" width="50" align="center">
                     </el-table-column>
                     <el-table-column label="类别名称" align="center" prop="name" :show-overflow-tooltip="true" />
-                    <el-table-column label="封面" align="center" prop="uri" width="400">
+                    <el-table-column label="封面" align="center" prop="icon" width="400">
                         <template slot-scope="scope">
                             <el-image style="width: auto; height: 100px" :src="host + scope.row.uri">
                             </el-image>
@@ -328,6 +328,7 @@ export default {
             getCategory(id).then(response => {
                 const data = response.data;
                 this.form = data;
+                this.value = this.host + data.uri;
                 this.open = true;
                 this.title = "修改vip卡";
             });

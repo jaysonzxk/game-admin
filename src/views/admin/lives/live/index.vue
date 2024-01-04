@@ -3,68 +3,71 @@
         <el-row>
             <el-col :span="20" :xs="24">
                 <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-                    <el-form-item :label="$t('game.gameName')" prop="name">
-                        <el-input v-model="queryParams.name" :placeholder="$t('game.placeholderGameName')" clearable size="small"
+                    <el-form-item :label="$t('live.liveName')" prop="name">
+                        <el-input v-model="queryParams.name" :placeholder="$t('live.placeholderLiveName')" clearable size="small"
                             style="width: 240px" @keyup.enter.native="handleQuery" />
                     </el-form-item>
                     
-                    <el-form-item :label="$t('game.status')" prop="status">
-                        <el-select v-model="queryParams.status" :placeholder="$t('game.status')" clearable size="small"
+                    <el-form-item :label="$t('live.status')" prop="status">
+                        <el-select v-model="queryParams.status" :placeholder="$t('live.status')" clearable size="small"
                             style="width: 240px">
                             <el-option v-for="dict in statusOptions" :key="dict.dictValue" :label="dict.dictLabel"
                                 :value="dict.dictValue" />
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="false" :label="$t('game.createDate')">
+                    <el-form-item v-if="false" :label="$t('live.createDate')">
                         <el-date-picker v-model="dateRange" size="small" style="width: 240px" value-format="yyyy-MM-dd"
-                            type="daterange" range-separator="-" :start-placeholder="$t('game.startDate')" :end-placeholder="$t('game.endDate')" />
+                            type="daterange" range-separator="-" :start-placeholder="$t('live.startDate')" :end-placeholder="$t('live.endDate')" />
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('game.search') }}</el-button>
-                        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('game.reset') }}</el-button>
+                        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('live.search') }}</el-button>
+                        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('live.reset') }}</el-button>
                     </el-form-item>
                 </el-form>
 
                 <el-row :gutter="10" class="mb8">
                     <el-col :span="1.5">
-                        <el-button v-hasPermi="['permission:user:post']" type="primary" plain icon="el-icon-plus"
+                        <el-button v-hasPermi="['live:lives:add:post']" type="primary" plain icon="el-icon-plus"
                             size="mini" @click="handleAdd">新增
                         </el-button>
                     </el-col>
                     <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
                 </el-row>
 
-                <el-table v-loading="loading" :data="gameList" @selection-change="handleSelectionChange">
+                <el-table v-loading="loading" :data="liveList" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center" />
                     <el-table-column :label="$t('table.index')" type="index" width="80" align="center">
                     </el-table-column>
-                    <el-table-column :label="$t('table.gameName')" align="center" prop="name" :show-overflow-tooltip="true" />
+                    <el-table-column :label="$t('table.liveName')" align="center" prop="name" :show-overflow-tooltip="true" />
                     <el-table-column :label="$t('table.cover')" align="center" prop="uri" width="200">
                         <template slot-scope="scope">
                             <el-image style="width: auto; height: 100px" :src="host + scope.row.uri">
                             </el-image>
                         </template>
                     </el-table-column>
-                    <el-table-column :label="$t('table.jumpUrl')" align="center" prop="url" :show-overflow-tooltip="true" />
+                    <!-- <el-table-column :label="$t('table.jumpUrl')" align="center" prop="url" :show-overflow-tooltip="true" /> -->
+                    <el-table-column :label="$t('table.tickets')" align="center" prop="tickets" :show-overflow-tooltip="true" />
+                    <el-table-column :label="$t('table.heatValue')" align="center" prop="heatValue" :show-overflow-tooltip="true" />
                     <el-table-column :label="$t('table.sort')" align="center" prop="sort" :show-overflow-tooltip="true" />
-                    <el-table-column :label="$t('table.recommend')" align="center">
+                    <!-- <el-table-column :label="$t('table.recommend')" align="center">
                         <template slot-scope="scope">
                             <span v-if="scope.row.isRecommend === 1">推荐</span>
                             <span v-else>--</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('table.hot')" align="center">
+                    </el-table-column> -->
+                    <!-- <el-table-column :label="$t('table.hot')" align="center">
                         <template slot-scope="scope">
                             <span v-if="scope.row.isHot === 1">热门</span>
                             <span v-else>--</span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column :label="$t('table.status')" align="center">
                         <template slot-scope="scope">
                             <span v-if="scope.row.status === 1">上架</span>
                             <span v-else>下架</span>
                         </template>
                     </el-table-column>
+                    <el-table-column :label="$t('table.desc')" align="center" prop="description" :show-overflow-tooltip="true" />
                     <el-table-column :label="$t('table.updateDate')" align="center" prop="update_datetime" width="160">
                         <template slot-scope="scope">
                             <span>{{ parseTime(scope.row.update_datetime) }}</span>
@@ -75,15 +78,15 @@
                             <span>{{ parseTime(scope.row.create_datetime) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column v-if="hasPermi(['games:games:post', 'games:games:post'])" :label="$t('table.operate')" align="center"
+                    <el-table-column v-if="hasPermi(['live:lives:update:post', 'live:lives:delete:post'])" :label="$t('table.operate')" align="center"
                         width="160" class-name="small-padding fixed-width">
                         <template slot-scope="scope">
-                            <el-button v-hasPermi="['games:games:post']" size="mini" type="text" icon="el-icon-edit"
+                            <el-button v-hasPermi="['live:lives:update:post']" size="mini" type="text" icon="el-icon-edit"
                                 @click="handleUpdate(scope.row)">修改
                             </el-button>
-                            <!-- <el-button v-hasPermi="['member:vip:post']" size="mini" type="text" icon="el-icon-edit"
+                            <el-button v-hasPermi="['live:lives:delete:post']" size="mini" type="text" icon="el-icon-edit"
                                 @click="handleDelete(scope.row)">删除
-                            </el-button> -->
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -98,22 +101,8 @@
             <el-form ref="form" :model="form" :rules="rules" label-width="100px">
                 <el-row>
                     <el-col :span="14">
-                        <el-form-item label="游戏名称" prop="name">
-                            <el-input v-model="form.name" placeholder="请输入类别名称" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="14">
-                        <el-form-item label="跳转地址" prop="url">
-                            <el-input v-model="form.url" placeholder="请输入跳转地址" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="三方游戏" prop="gameCategory">
-                            <el-select v-model="form.gameCategory" placeholder="三方游戏" clearable size="small"
-                                style="width: 240px">
-                                <el-option v-for="(item, index) in allCategoryList" :key="index" :label="item.name"
-                                    :value="item.id" />
-                            </el-select>
+                        <el-form-item label="直播间名称" prop="name">
+                            <el-input v-model="form.name" placeholder="请输入直播间名称" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="20">
@@ -149,26 +138,32 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
+                        <el-form-item label="所属模块" prop="tag">
+                            <el-select v-model="form.tag" placeholder="所属模块" clearable size="small"
+                                style="width: 240px">
+                                <el-option v-for="(item, index) in allTags" :key="index" :label="item.name"
+                                    :value="item.id" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="门票价格" prop="tickets">
+                            <el-input v-model="form.tickets" placeholder="请输入门票价格" type="number" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="热度值" prop="heatValue">
+                            <el-input v-model="form.heatValue" placeholder="请输入热度值" type="number" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="排序" prop="sort">
                             <el-input v-model="form.sort" placeholder="请输入排序" type="number" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="是否推荐">
-                            <el-radio-group v-model="form.isRecommend">
-                                <el-radio v-for="dict in recommendOptions" :key="dict.dictValue" :label="dict.dictValue">{{
-                                    dict.dictLabel
-                                }}</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="是否热门">
-                            <el-radio-group v-model="form.isHot">
-                                <el-radio v-for="dict in hotOptions" :key="dict.dictValue" :label="dict.dictValue">{{
-                                    dict.dictLabel
-                                }}</el-radio>
-                            </el-radio-group>
+                        <el-form-item label="直播间描述" prop="description">
+                            <el-input v-model="form.description" placeholder="请输入直播间描述" type="textarea" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -180,6 +175,7 @@
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
+                    
                     <!-- <el-col :span="24">
                         <el-form-item label="到期时间" prop="expiration">
                             <el-date-picker v-model="form.expiration" type="datetime" placeholder="选择日期时间">
@@ -198,12 +194,13 @@
   
 <script>
 import {
-    addGame,
-    getGame,
-    listGame,
-    updateGame,
-    AllCategory
-} from "@/api/admin/games/game";
+    listLive,
+    getLive,
+    addLive,
+    updateLive,
+    delLive,
+    allTag
+} from "@/api/admin/lives/live";
 import { getToken } from "@/utils/auth";
 export default {
     name: "Category",
@@ -225,9 +222,11 @@ export default {
             // 总条数
             total: 0,
             // 用户表格数据
-            gameList: null,
+            liveList: null,
             // 厂商；列表
             allCategoryList: null,
+            // 所有模块
+            allTags: null,
             // 弹出层标题
             title: "",
             // 是否显示弹出层
@@ -236,10 +235,6 @@ export default {
             dateRange: [],
             // 状态数据字典
             statusOptions: [{ dictLabel: "上架", dictValue: 1 }, { dictLabel: "下架", dictValue: 0 }],
-            // 推荐
-            recommendOptions: [{ dictLabel: "推荐", dictValue: 1 }, { dictLabel: "不推荐", dictValue: 0 }],
-            // 热门
-            hotOptions: [{ dictLabel: "热门", dictValue: 1 }, { dictLabel: "不热门", dictValue: 0 }],
             // 表单参数
             form: {
                 status: 1
@@ -273,13 +268,13 @@ export default {
     },
     created() {
         this.getList();
-        this.getAllCategory();
+        this.getAllTag();
     },
     methods: {
         
-        getAllCategory() {
-            AllCategory().then(response => {
-                this.allCategoryList = response.data;
+        getAllTag() {
+            allTag().then(response => {
+                this.allTags = response.data;
             })
         },
         removeImage() {
@@ -310,8 +305,8 @@ export default {
         /** 查询用户列表 */
         getList() {
             this.loading = true;
-            listGame(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-                this.gameList = response.data.results;
+            listLive(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+                this.liveList = response.data.results;
                 this.total = response.data.count;
                 this.loading = false;
             }
@@ -379,13 +374,13 @@ export default {
             this.reset();
             
             this.open = true;
-            this.title = "添加游戏";
+            this.title = "添加直播间配置";
         },
         /** 修改按钮操作 */
         handleUpdate(row) {
             // this.reset();
             const id = row.id || this.ids;
-            getGame(id).then(response => {
+            getLive(id).then(response => {
                 const data = response.data;
                 this.form = data;
                 this.value = this.host + data.uri;
@@ -399,13 +394,13 @@ export default {
             this.$refs["form"].validate(valid => {
                 if (valid) {
                     if (this.form.id !== undefined) {
-                        updateGame(this.form).then(response => {
+                        updateLive(this.form).then(response => {
                             this.msgSuccess("修改成功");
                             this.open = false;
                             this.getList();
                         });
                     } else {
-                        addGame(this.form).then(response => {
+                        addLive(this.form).then(response => {
                             this.msgSuccess("新增成功");
                             this.open = false;
                             this.getList();
@@ -416,19 +411,19 @@ export default {
             });
         },
         /** 删除按钮操作 */
-        // handleDelete(row) {
-        //     const vipCardId = row.id || this.ids;
-        //     this.$confirm('是否确认删除该数据', "警告", {
-        //         confirmButtonText: "确定",
-        //         cancelButtonText: "取消",
-        //         type: "warning"
-        //     }).then(function () {
-        //         return delCategory(vipCardId);
-        //     }).then(() => {
-        //         this.getList();
-        //         this.msgSuccess("删除成功");
-        //     });
-        // },
+        handleDelete(row) {
+            const liveId = row.id || this.ids;
+            this.$confirm('是否确认删除该数据', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+            }).then(function () {
+                return delLive(liveId);
+            }).then(() => {
+                this.getList();
+                this.msgSuccess("删除成功");
+            });
+        },
     }
 };
 </script>
