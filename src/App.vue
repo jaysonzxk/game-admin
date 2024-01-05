@@ -24,18 +24,18 @@ export default {
   data() {
     return {
       language:{
-        value: 'ZH-CN',
+        value: navigator.language,
         title: '简体中文',
         icon: require('./assets/images/cn.png')
       },
       languageList: [
         {
-          value: 'ZH-CN',
+          value: 'zh-CN',
           title: '简体中文',
           icon: require('./assets/images/cn.png')
         },
         {
-          value: 'EN-US',
+          value: 'en-US',
           title: 'English',
           icon: require('./assets/images/en.png')
         },
@@ -72,15 +72,17 @@ export default {
       ],
     }
   },
+  computed: {
+  },
   methods: {
     changeLanguage(index){
       this.language = this.languageList[index];
       switch (this.language.value) {
-        case "EN-US":
+        case "en-US":
           this.$i18n.locale = "en";
           localStorage.setItem('lang', 'en');
           break;
-        case "ZH-CN":
+        case "zh-CN":
           this.$i18n.locale = "zh";
           localStorage.setItem('lang', 'zh');
           break;
