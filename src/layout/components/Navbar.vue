@@ -1,13 +1,15 @@
 <template>
   <div class="navbar">
-    <hamburger
-      id="hamburger-container"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />
+    <div>
+      <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
+        @toggleClick="toggleSideBar" />
 
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    </div>
+    <div class="center">
+      <span style="font-size: 14px; font-weight: 600;">待处理充值订单: <i style="color: #eb3323; font-weight: 700;">{{ recharge }}</i></span>
+      <span style="font-size: 14px; font-weight: 600;">待处理提现订单: <i style="color: #eb3323; font-weight: 700;">{{ withdraw }}</i></span>
+    </div>
 
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
@@ -33,10 +35,7 @@
         </el-tooltip> -->
       </template>
 
-      <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
-        trigger="click"
-      >
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
@@ -81,7 +80,9 @@ export default {
   },
   data() {
     return {
-      count: store.unread_msg_count
+      count: store.unread_msg_count,
+      withdraw: 122,
+      recharge: 2312
     };
   },
   computed: {
@@ -121,9 +122,12 @@ export default {
 .navbar {
   height: 50px;
   overflow: hidden;
-  position: relative;
+  // position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   .hamburger-container {
     line-height: 46px;
@@ -146,17 +150,24 @@ export default {
     display: inline-block;
     vertical-align: top;
   }
-
+  .center{
+    display: flex;
+    span{
+      margin: 0 5px;
+    }
+  }
   .right-menu {
     float: right;
     height: 100%;
     line-height: 50px;
+
     .badge-item {
       height: 70px;
       width: 30px;
       line-height: 40px;
       text-align: center;
       margin-right: 5px;
+
       .badge-item-icon {
         width: 18px;
         color: #5a5e66;
