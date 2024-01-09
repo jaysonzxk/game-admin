@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+   
     <div class="lang">
       <el-dropdown trigger="click" @command="changeLanguage">
         <span class="el-dropdown-link lang-icon" style="padding: 10px 10px; color: black; font-weight: 700;">
@@ -23,6 +24,7 @@ export default {
   name: "App",
   data() {
     return {
+      
       language:{
         value: navigator.language,
         title: '简体中文',
@@ -71,6 +73,7 @@ export default {
         }
       ],
     }
+    
   },
   computed: {
   },
@@ -113,6 +116,7 @@ export default {
       }
     },
   },
+  
 };
 </script>
 <style lang="scss">

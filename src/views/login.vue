@@ -129,7 +129,6 @@ export default {
           this.$store.dispatch("Login", loginData).then(() => {
             this.$router.push({ path: this.redirect || "/" }).catch(() => { });
           }).catch((e) => {
-            console.log(e);
             this.loading = false;
             this.getCode();
           });

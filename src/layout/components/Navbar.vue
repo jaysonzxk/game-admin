@@ -1,57 +1,67 @@
 <template>
-  <div class="navbar">
+  <div>
     <div>
-      <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
-        @toggleClick="toggleSideBar" />
-
-      <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+      <audio ref="audio">
+        <source src="../../assets/mp3/chongzhi.mp3" autoplay ref="au" type="audio/mp3" />
+      </audio>
     </div>
-    <div class="center">
-      <span style="font-size: 14px; font-weight: 600;">待处理充值订单: <i style="color: #eb3323; font-weight: 700;">{{ recharge }}</i></span>
-      <span style="font-size: 14px; font-weight: 600;">待处理提现订单: <i style="color: #eb3323; font-weight: 700;">{{ withdraw }}</i></span>
-    </div>
+    <div class="navbar">
 
-    <div class="right-menu">
-      <template v-if="device !== 'mobile'">
-        <div class="right-menu-item hover-effect">
-          <router-link to="/user/msg">
-            <i class="el-icon-message-solid badge-item-icon" />
-            <el-badge v-if="unread_msg_count" :value="unread_msg_count" :max="99" style="margin-left: -4px;" />
-          </router-link>
-        </div>
-        <!-- <search id="header-search" class="right-menu-item" />
+      <div>
+        <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container"
+          @toggleClick="toggleSideBar" />
+
+        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+      </div>
+      <div class="center">
+        <span style="font-size: 14px; font-weight: 600;">待处理充值订单: <i style="color: #eb3323; font-weight: 700;">{{ recharge
+        }}</i></span>
+        <span style="font-size: 14px; font-weight: 600;">待处理提现订单: <i style="color: #eb3323; font-weight: 700;">{{ withdraw
+        }}</i></span>
+      </div>
+
+      <div class="right-menu">
+        <template v-if="device !== 'mobile'">
+          <div class="right-menu-item hover-effect">
+            <router-link to="/user/msg">
+              <i class="el-icon-message-solid badge-item-icon" />
+              <el-badge v-if="unread_msg_count" :value="unread_msg_count" :max="99" style="margin-left: -4px;" />
+            </router-link>
+          </div>
+          <!-- <search id="header-search" class="right-menu-item" />
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip> -->
 
-        <!-- <el-tooltip content="文档地址" effect="dark" placement="bottom">
+          <!-- <el-tooltip content="文档地址" effect="dark" placement="bottom">
           <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
         </el-tooltip> -->
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+          <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
-        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
+          <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip> -->
-      </template>
+        </template>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/user/profile">
-            <el-dropdown-item>{{ $t('navBar.personalCentre') }}</el-dropdown-item>
-          </router-link>
-          <!-- <el-dropdown-item @click.native="setting = true">
+        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+          <div class="avatar-wrapper">
+            <img :src="avatar" class="user-avatar">
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <router-link to="/user/profile">
+              <el-dropdown-item>{{ $t('navBar.personalCentre') }}</el-dropdown-item>
+            </router-link>
+            <!-- <el-dropdown-item @click.native="setting = true">
             <span>布局设置</span>
           </el-dropdown-item> -->
-          <el-dropdown-item divided @click.native="logout">
-            <span>{{ $t('navBar.logout') }}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+            <el-dropdown-item divided @click.native="logout">
+              <span>{{ $t('navBar.logout') }}</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -80,6 +90,11 @@ export default {
   },
   data() {
     return {
+      mp3List: [
+        {name: 'chongzhi', mp3: require('../../assets/mp3/chongzhi.mp3')},
+        {name: 'tixian', mp3: require('../../assets/mp3/tixian1.mp3')},
+      ],
+      timer: null,
       count: store.unread_msg_count,
       withdraw: 122,
       recharge: 2312
@@ -114,7 +129,14 @@ export default {
         });
       });
     }
-  }
+  },
+  mounted() {
+    // this.timer = setInterval(this.audio, 1000)
+    setInterval(() => {
+      this.$refs.audio.play();
+    }, 5000);
+
+  },
 };
 </script>
 
@@ -150,12 +172,15 @@ export default {
     display: inline-block;
     vertical-align: top;
   }
-  .center{
+
+  .center {
     display: flex;
-    span{
+
+    span {
       margin: 0 5px;
     }
   }
+
   .right-menu {
     float: right;
     height: 100%;
@@ -221,5 +246,4 @@ export default {
       }
     }
   }
-}
-</style>
+}</style>
