@@ -421,6 +421,7 @@ import { getToken } from "@/utils/auth";
 import { treeselect } from "@/api/admin/permission/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import md5 from 'js-md5';
 
 export default {
   name: "User",
@@ -685,7 +686,9 @@ export default {
             });
           } else {
             this.form.deptId = 1;
-            addUser(this.form).then(response => {
+            const formData = this.form;
+            formData.password = md5(this.form.password);
+            addUser(formData).then(response => {
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();

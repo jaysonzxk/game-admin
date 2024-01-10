@@ -21,7 +21,7 @@ export function getUser(userId) {
 // 新增用户
 export function addUser(data) {
   return request({
-    url: "/admin/permission/user/",
+    url: "/admin/permission/user/add",
     method: "post",
     data: data
   });

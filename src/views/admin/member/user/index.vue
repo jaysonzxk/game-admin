@@ -50,24 +50,26 @@
 
                 <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
                     <el-table-column type="selection" width="50" align="center" />
-                    <el-table-column v-if="columns[0].visible" key="id" label="用户编号" align="center" prop="id" />
-                    <el-table-column v-if="columns[1].visible" key="username" label="用户名称" align="center" prop="username"
+                    <el-table-column label="序号" type="index" width="50" align="center" />
+                    <el-table-column key="username" label="用户名称" align="center" prop="username"
                         :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[2].visible" key="name" label="用户昵称" align="center" prop="name"
+                    <el-table-column key="name" label="用户昵称" align="center" prop="name" :show-overflow-tooltip="true" />
+                    <el-table-column key="balance" label="账户余额" align="center" prop="balance" :show-overflow-tooltip="true">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.balance === null">0</span>
+                            <span v-else>{{ scope.row.balance }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column key="inviteCode" label="邀请码" align="center" prop="inviteCode"
                         :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[3].visible" key="inviteCode" label="邀请码" align="center" prop="inviteCode"
-                        :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[4].visible" key="parent" label="上级" align="center" prop="parent"
-                        :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[5].visible" key="mobile" label="手机号码" align="center" prop="mobile"
-                        width="120" />
-                    <el-table-column v-if="columns[6].visible" key="is_active" label="状态" align="center">
+                    <el-table-column key="parent" label="上级" align="center" prop="parent" :show-overflow-tooltip="true" />
+                    <el-table-column key="mobile" label="手机号码" align="center" prop="mobile" width="120" />
+                    <el-table-column key="is_active" label="状态" align="center">
                         <template slot-scope="scope">
                             <el-switch v-model="scope.row.is_active" disabled @change="handleStatusChange(scope.row)" />
                         </template>
                     </el-table-column>
-                    <el-table-column v-if="columns[7].visible" label="创建时间" align="center" prop="create_datetime"
-                        width="160">
+                    <el-table-column label="创建时间" align="center" prop="create_datetime" width="160">
                         <template slot-scope="scope">
                             <span>{{ parseTime(scope.row.create_datetime) }}</span>
                         </template>
@@ -79,7 +81,7 @@
                             <el-button v-hasPermi="['permission:user:{id}:put']" size="mini" type="text" icon="el-icon-edit"
                                 @click="handleUpdate(scope.row)">修改
                             </el-button>
-                            
+
                         </template>
                     </el-table-column>
                 </el-table>
@@ -266,7 +268,7 @@ export default {
         };
     },
     watch: {
-       
+
     },
     created() {
         this.getList();
@@ -291,13 +293,13 @@ export default {
             }
             );
         },
-       
+
         // 筛选节点
         filterNode(value, data) {
             if (!value) return true;
             return data.label.indexOf(value) !== -1;
         },
-        
+
         // 用户状态修改
         handleStatusChange(row) {
             const text = row.is_active === true ? "启用" : "停用";

@@ -4,8 +4,8 @@
             <!--用户数据-->
             <el-col :span="20" :xs="24">
                 <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-                    <el-form-item label="用户名称" prop="name">
-                        <el-input v-model="queryParams.name" placeholder="请输入用户名称" clearable size="small"
+                    <el-form-item label="VIP名称" prop="name">
+                        <el-input v-model="queryParams.name" placeholder="请输入VIP名称" clearable size="small"
                             style="width: 240px" @keyup.enter.native="handleQuery" />
                     </el-form-item>
                     <el-form-item label="状态" prop="status">
@@ -39,11 +39,11 @@
                     <!-- <el-table-column v-if="columns[0].visible" key="id" label="用户编号" align="center" prop="id" /> -->
                     <el-table-column label="序号" type="index" width="50" align="center">
                     </el-table-column>
-                    <el-table-column v-if="columns[1].visible" key="name" label="用户名称" align="center" prop="name"
+                    <el-table-column v-if="columns[1].visible" key="name" label="VIP名称" align="center" prop="name"
                         :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[2].visible" key="originAmount" label="原价(U)" align="center"
+                    <el-table-column v-if="columns[2].visible" key="originAmount" label="原价" align="center"
                         prop="originAmount" :show-overflow-tooltip="true" />
-                    <el-table-column v-if="columns[3].visible" key="discountAmount" label="优惠价格(U)" align="center"
+                    <el-table-column v-if="columns[3].visible" key="discountAmount" label="优惠价格" align="center"
                         prop="discountAmount" :show-overflow-tooltip="true" />
                     <el-table-column v-if="columns[4].visible" key="status" label="状态" align="center">
                         <template slot-scope="scope">
